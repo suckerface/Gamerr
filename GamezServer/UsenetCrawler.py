@@ -17,10 +17,8 @@ class UsenetCrawler(object):
         'Sony PSP': '1020',
         'Nintendo Wii': '1030,1060',
         'Microsoft Xbox': '1040',
-        'Microsoft Xbox 360': '1050,1070'
-     #   'Nintendo Switch': '1110'
-     #   'PC': '4050'
-     #   'Microsoft Xbox One': '1090'
+        'Microsoft Xbox 360': '1050,1070',
+        'PC': '4050'
     };
 
     def __init__(self,forceNew=False):
@@ -40,8 +38,8 @@ class UsenetCrawler(object):
 
     def SearchAndSendToSab(self,usenetCrawlerApiKey, sabnzbdApiKey, platform, title, wantedGameId,sabnzbdBaseUrl):
         cat = self.categories.get(platform, self.defaultCategory)
-        usenetCrawlerUrl = "https://api.nzbgeek.info/api?t=search&q=" + urllib.quote_plus(title) + "&cat=" + cat + "&apikey=" + usenetCrawlerApiKey
-#        usenetCrawlerUrl = "https://www.usenet-crawler.com/api?apikey=" + usenetCrawlerApiKey + "&t=search&q="+ urllib.quote_plus(title) + "&sort=posted_desc&cat=" + cat
+        usenetCrawlerUrl = "https://api.nzbgeek.info/api?apikey=" + usenetCrawlerApiKey + "&t=search&q=" + urllib.quote_plus(title) + "&cat=" + cat
+        #usenetCrawlerUrl = "https://www.usenet-crawler.com/api?apikey=" + usenetCrawlerApiKey + "&t=search&q="+ urllib.quote_plus(title) + "&sort=posted_desc&cat=" + cat
         
         webRequest = urllib2.Request(usenetCrawlerUrl, None, {'User-Agent' : "GamezServer"})
         response = urllib2.urlopen(webRequest)
@@ -54,7 +52,7 @@ class UsenetCrawler(object):
             if(self.forceNew):
                 continue
             searchers = Searchers.Searchers()
-            sabRespData = searchers.SendToSab(sabnzbdBaseUrl, sabnzbdApiKey, nzbLink, nzbTitle, wantedGameId)
+            sabRespData = searchers.SendToSab(sabnzbdBaseUrl,sabnzbdApiKey,nzbLink, nzbTitle, wantedGameId)
             if(sabRespData == b'ok\n'):
                 dao = DAO()
                 dao.LogMessage("Snatched Game" + nzbTitle, "Info")
